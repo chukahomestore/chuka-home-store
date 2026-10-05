@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chuka Home Store</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f7f8f6;color:#18201b}.top{height:72px;background:#fff;display:flex;align-items:center;gap:22px;padding:0 5%;border-bottom:1px solid #e6e9e5;position:sticky;top:0;z-index:10}.brand{font-size:22px;font-weight:800;white-space:nowrap}.search{flex:1}.search input{width:100%;padding:13px 16px;border:1px solid #d9ded8;border-radius:12px;font-size:15px}.cartBtn{border:0;background:#153d2a;color:#fff;padding:12px 18px;border-radius:10px;font-weight:700}.cartBtn span{background:#fff;color:#153d2a;border-radius:99px;padding:2px 7px;margin-left:5px}.nav{display:flex;gap:8px;padding:12px 5%;overflow:auto;background:#fff}.cat{border:1px solid #dce2dc;background:#fff;padding:9px 15px;border-radius:99px;white-space:nowrap}.cat.active{background:#153d2a;color:#fff;border-color:#153d2a}.hero{margin:28px 5%;border-radius:22px;background:#dcebdc;padding:42px;display:flex;justify-content:space-between;align-items:center;gap:25px}.hero h1{font-size:clamp(32px,5vw,58px);max-width:700px;margin:8px 0}.hero p{max-width:650px;line-height:1.6}.eyebrow{font-weight:800;letter-spacing:2px}.heroCard{background:#fff;border-radius:18px;padding:28px;min-width:210px;display:grid;gap:8px;box-shadow:0 8px 25px #00000010}.heroCard strong{font-size:24px}.primary{background:#153d2a;color:#fff;border:0;border-radius:10px;padding:13px 19px;font-weight:800;cursor:pointer}.full{width:100%;margin-top:15px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin:25px 5% 15px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;margin:0 5% 50px}.card{background:#fff;border:1px solid #e4e8e3;border-radius:16px;overflow:hidden;display:flex;flex-direction:column}.pic{height:170px;background:linear-gradient(135deg,#e9eee8,#f7faf5);display:grid;place-items:center;font-size:42px}.cardBody{padding:16px;display:grid;gap:8px}.card h3{font-size:16px;margin:0}.muted{color:#6c756e;font-size:13px}.price{font-size:19px;font-weight:800}.add{border:0;border-radius:9px;padding:10px;background:#eef4ed;font-weight:800;cursor:pointer}.overlay{display:none;position:fixed;inset:0;background:#0006;z-index:19}.drawer{position:fixed;right:-430px;top:0;width:min(430px,100%);height:100%;background:#fff;z-index:20;padding:25px;transition:.25s;overflow:auto}.drawer.open{right:0}.overlay.open{display:block}.close{border:0;background:transparent;font-size:30px;cursor:pointer;float:right}.cartItem{display:grid;grid-template-columns:1fr auto;gap:8px;padding:14px 0;border-bottom:1px solid #eee}.qty button{border:1px solid #ddd;background:#fff;border-radius:6px;padding:4px 9px}.total{display:flex;justify-content:space-between;font-size:20px;padding-top:20px}.checkout{display:none;position:fixed;inset:0;background:#0008;z-index:30;overflow:auto;padding:30px}.checkout.show{display:grid;place-items:center}.checkoutBox{background:#fff;border-radius:18px;padding:28px;width:min(600px,100%);position:relative}.checkoutBox label{display:grid;gap:6px;margin:14px 0;font-weight:700}.checkoutBox input,.checkoutBox textarea{padding:12px;border:1px solid #d8ddd8;border-radius:9px;font:inherit}.checkoutBox textarea{min-height:80px}.payment{background:#edf6ee;border-radius:12px;padding:15px;display:grid;gap:6px}.confirmation{background:#eaf6eb;border-radius:12px;padding:18px;margin-top:15px}.hidden{display:none}footer{text-align:center;padding:30px;color:#6c756e;border-top:1px solid #e2e5e1}@media(max-width:700px){.top{padding:12px 4%;height:auto;flex-wrap:wrap}.brand{width:100%}.search{order:3;width:100%}.hero{margin:15px 4%;padding:25px;display:block}.heroCard{margin-top:20px}.grid{margin:0 4% 40px;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.pic{height:130px}.sectionHead{margin-left:4%;margin-right:4%}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Chuka Home Store</div>
+  <div class="search"><input id="search" placeholder="Search products..."></div>
+  <button class="cartBtn" id="cartBtn">Cart <span id="cartCount">0</span></button>
+</header>
+<nav class="nav">
+  <button class="cat active" data-cat="All">All</button>
+  <button class="cat" data-cat="Appliances">Appliances</button>
+  <button class="cat" data-cat="Kitchen">Kitchen</button>
+  <button class="cat" data-cat="Tableware">Tableware</button>
+  <button class="cat" data-cat="Storage">Storage</button>
+  <button class="cat" data-cat="Cleaning">Cleaning</button>
+  <button class="cat" data-cat="Home">Home</button>
+  <button class="cat" data-cat="Bottles">Bottles</button>
+  <button class="cat" data-cat="Electronics">Electronics</button>
+</nav>
+<section class="hero">
+  <div><p class="eyebrow">LOCAL DELIVERY • CHUKA</p><h1>Everyday essentials for your home.</h1>
+  <p>Shop kitchenware, storage, cleaning items, appliances and more — delivered within Chuka.</p>
+  <button class="primary" onclick="document.getElementById('products').scrollIntoView()">Shop now</button></div>
+  <div class="heroCard"><b>M-Pesa</b><span>Lipa na M-Pesa</span><strong>Till 3212044</strong></div>
+</section>
+<main>
+  <div class="sectionHead"><h2>Products</h2><span id="resultCount"></span></div>
+  <div id="products" class="grid"></div>
+</main>
+
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <button class="close" id="closeCart">×</button>
+  <h2>Your cart</h2>
+  <div id="cartItems"></div>
+  <div class="total"><span>Total</span><b id="cartTotal">KSh 0</b></div>
+  <button class="primary full" id="checkoutBtn">Checkout</button>
+</aside>
+
+<section class="checkout" id="checkout">
+  <div class="checkoutBox">
+    <button class="close" id="closeCheckout">×</button>
+    <h2>Checkout</h2>
+    <p class="muted">Delivery is available within Chuka, Kenya only.</p>
+    <form id="orderForm">
+      <label>Full name<input required id="customerName"></label>
+      <label>Phone number<input required id="phone" placeholder="07XXXXXXXX"></label>
+      <label>Delivery location in Chuka<input required id="location" placeholder="Estate / area / landmark"></label>
+      <label>Order notes (optional)<textarea id="notes"></textarea></label>
+      <div class="payment"><b>Payment</b><span>M-Pesa Lipa na M-Pesa</span><strong>Till 3212044</strong><small>Enter your phone number above. Complete payment to the Till, then submit your order.</small></div>
+      <button class="primary full" type="submit">Place order</button>
+    </form>
+    <div id="confirmation" class="confirmation hidden"></div>
+  </div>
+</section>
+
+<footer>© <span id="year"></span> Chuka Home Store • Delivery within Chuka only</footer>
+<script>
+const PRODUCTS = [
+  {
+    "id": "kettle-aiyons",
+    "name": "Kettle — Aiyons",
+    "category": "Appliances",
+    "displayPrice": "1000",
+    "price": 1000,
+    "description": "Aiyons kettle"
+  },
+  {
+    "id": "kettle-sonar",
+    "name": "Kettle — Sonar",
+    "category": "Appliances",
+    "displayPrice": "850",
+    "price": 850,
+    "description": "Sonar kettle"
+  },
+  {
+    "id": "blender-alyons",
+    "name": "Blender — Alyons",
+    "category": "Appliances",
+    "displayPrice": "2200",
+    "price": 2200,
+    "description": "Alyons blender"
+  },
+  {
+    "id": "blender-sonar",
+    "name": "Blender — Sonar",
+    "category": "Appliances",
+    "displayPrice": "2100",
+    "price": 2100,
+    "description": "Sonar blender"
+  },
+  {
+    "id": "extension-ayons",
+    "name": "Extension — Ayons",
+    "category": "Electronics",
+    "displayPrice": "450",
+    "price": 450,
+    "description": "Ayons extension"
+  },
+  {
+    "id": "extension-powerking",
+    "name": "Extension — Power King",
+    "category": "Electronics",
+    "displayPrice": "450",
+    "price": 450,
+    "description": "Power King extension"
+  },
+  {
+    "id": "extension-marken",
+    "name": "Extension — Marken",
+    "category": "Electronics",
+    "displayPrice": "700",
+    "price": 700,
+    "description": "Marken extension"
+  },
+  {
+    "id": "extension-caston",
+    "name": "Extension — Caston",
+    "category": "Electronics",
+    "displayPrice": "550",
+    "price": 550,
+    "description": "Caston extension"
+  },
+  {
+    "id": "iron-box",
+    "name": "Iron Box",
+    "category": "Appliances",
+    "displayPrice": "950",
+    "price": 950,
+    "description": "Iron box"
+  },
+  {
+    "id": "water-dispenser",
+    "name": "Water Dispenser",
+    "category": "Appliances",
+    "displayPrice": "550",
+    "price": 550,
+    "description": "Water dispenser"
+  },
+  {
+    "id": "japanese-bowls",
+    "name": "Japanese Bowls",
+    "category": "Tableware",
+    "displayPrice": "150",
+    "price": 150,
+    "description": "Japanese bowls"
+  },
+  {
+    "id": "ring-plates",
+    "name": "Ring Plates",
+    "category": "Tableware",
+    "displayPrice": "150–220",
+    "price": 150,
+    "description": "Small KSh 150; Medium KSh 200; Large KSh 220"
+  },
+  {
+    "id": "ring-mug",
+    "name": "Ring Mug",
+    "category": "Tableware",
+    "displayPrice": "15 each / 800 set of 6",
+    "price": 15,
+    "description": "Individual KSh 15; set of 6 KSh 800"
+  },
+  {
+    "id": "black-mugs",
+    "name": "Black Mugs",
+    "category": "Tableware",
+    "displayPrice": "130 each / 650 set of 6",
+    "price": 130,
+    "description": "Individual KSh 130; set of 6 KSh 650"
+  },
+  {
+    "id": "white-mugs",
+    "name": "White Mugs",
+    "category": "Tableware",
+    "displayPrice": "130 each / 650 set of 6",
+    "price": 130,
+    "description": "Individual KSh 130; set of 6 KSh 650"
+  },
+  {
+    "id": "pink-mugs",
+    "name": "Pink Mugs",
+    "category": "Tableware",
+    "displayPrice": "130 each / 650 set of 6",
+    "price": 130,
+    "description": "Individual KSh 130; set of 6 KSh 650"
+  },
+  {
+    "id": "black-plates",
+    "name": "Black Plates",
+    "category": "Tableware",
+    "displayPrice": "200 each / 1100 set of 6",
+    "price": 200,
+    "description": "Individual KSh 200; set of 6 KSh 1100"
+  },
+  {
+    "id": "kaulo-plate",
+    "name": "Kaulo Plate",
+    "category": "Tableware",
+    "displayPrice": "100",
+    "price": 100,
+    "description": "Kaulo plate"
+  },
+  {
+    "id": "p2230",
+    "name": "P2230",
+    "category": "Tableware",
+    "displayPrice": "120 each / 600 set of 6",
+    "price": 120,
+    "description": "Individual KSh 120; set of 6 KSh 600"
+  },
+  {
+    "id": "plastic-plates-kenstar",
+    "name": "Plastic Plates — Kenstar",
+    "category": "Tableware",
+    "displayPrice": "60",
+    "price": 60,
+    "description": "Kenstar plastic plates"
+  },
+  {
+    "id": "small-plastic-plates",
+    "name": "Small Plastic Plates",
+    "category": "Tableware",
+    "displayPrice": "40",
+    "price": 40,
+    "description": "Small plastic plates"
+  },
+  {
+    "id": "kenstar-cup",
+    "name": "Plastic Cup — Kenstar",
+    "category": "Tableware",
+    "displayPrice": "80",
+    "price": 80,
+    "description": "Kenstar cup"
+  },
+  {
+    "id": "pionner-cup",
+    "name": "Plastic Cup — Pionner",
+    "category": "Tableware",
+    "displayPrice": "40",
+    "price": 40,
+    "description": "Pionner cup"
+  },
+  {
+    "id": "adix-cup",
+    "name": "Plastic Cup — Adix Small",
+    "category": "Tableware",
+    "displayPrice": "30",
+    "price": 30,
+    "description": "Adix small cup"
+  },
+  {
+    "id": "tumblers",
+    "name": "Tumblers",
+    "category": "Tableware",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Tumblers"
+  },
+  {
+    "id": "small-tumbler",
+    "name": "Small Tumbler",
+    "category": "Tableware",
+    "displayPrice": "40",
+    "price": 40,
+    "description": "Small tumbler"
+  },
+  {
+    "id": "disposable-tumblers",
+    "name": "Disposable Tumblers",
+    "category": "Tableware",
+    "displayPrice": "100",
+    "price": 100,
+    "description": "Disposable tumblers"
+  },
+  {
+    "id": "water-glass",
+    "name": "Water Glass",
+    "category": "Tableware",
+    "displayPrice": "100–130",
+    "price": 100,
+    "description": "Small KSh 100; Large KSh 130"
+  },
+  {
+    "id": "wine-glass",
+    "name": "Wine Glass",
+    "category": "Tableware",
+    "displayPrice": "170",
+    "price": 170,
+    "description": "Wine glass"
+  },
+  {
+    "id": "tot-glass",
+    "name": "Tot Glass",
+    "category": "Tableware",
+    "displayPrice": "100",
+    "price": 100,
+    "description": "Tot glass"
+  },
+  {
+    "id": "bottle-3in1",
+    "name": "Water Bottle — 3 in 1, 2L",
+    "category": "Bottles",
+    "displayPrice": "800",
+    "price": 800,
+    "description": "3 in 1 two liter"
+  },
+  {
+    "id": "bottle-2in1",
+    "name": "Water Bottle — 2 in 1, 1L",
+    "category": "Bottles",
+    "displayPrice": "600",
+    "price": 600,
+    "description": "2 in 1 one liter"
+  },
+  {
+    "id": "bottle-pattern",
+    "name": "Water Bottle — Pattern, 700ml",
+    "category": "Bottles",
+    "displayPrice": "350",
+    "price": 350,
+    "description": "Pattern 700ml"
+  },
+  {
+    "id": "bottle-music",
+    "name": "Water Bottle — Music, 700ml",
+    "category": "Bottles",
+    "displayPrice": "350",
+    "price": 350,
+    "description": "Music 700ml"
+  },
+  {
+    "id": "jugs",
+    "name": "Jugs",
+    "category": "Kitchen",
+    "displayPrice": "70–100",
+    "price": 70,
+    "description": "Price range KSh 70–100"
+  },
+  {
+    "id": "kiwi-knife",
+    "name": "Kiwi Knife",
+    "category": "Kitchen",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Kiwi knife"
+  },
+  {
+    "id": "blue-knife",
+    "name": "Blue Knife",
+    "category": "Kitchen",
+    "displayPrice": "70",
+    "price": 70,
+    "description": "Blue knife"
+  },
+  {
+    "id": "knife-sj6623",
+    "name": "Knife SJ6623",
+    "category": "Kitchen",
+    "displayPrice": "120",
+    "price": 120,
+    "description": "Knife SJ6623"
+  },
+  {
+    "id": "sj6623",
+    "name": "SJ6623",
+    "category": "Kitchen",
+    "displayPrice": "150",
+    "price": 150,
+    "description": "SJ6623"
+  },
+  {
+    "id": "melon-knife",
+    "name": "Melon Knife",
+    "category": "Kitchen",
+    "displayPrice": "180",
+    "price": 180,
+    "description": "Melon knife"
+  },
+  {
+    "id": "kamata",
+    "name": "Kamata",
+    "category": "Kitchen",
+    "displayPrice": "100",
+    "price": 100,
+    "description": "Kamata"
+  },
+  {
+    "id": "serving-spoon",
+    "name": "Serving Spoon",
+    "category": "Kitchen",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Serving spoon"
+  },
+  {
+    "id": "spoon-folk",
+    "name": "Spoon Folk",
+    "category": "Kitchen",
+    "displayPrice": "20",
+    "price": 20,
+    "description": "KSh 20 each"
+  },
+  {
+    "id": "chips-spoon",
+    "name": "Chips Spoon",
+    "category": "Kitchen",
+    "displayPrice": "170–250",
+    "price": 170,
+    "description": "Price range KSh 170–250"
+  },
+  {
+    "id": "smasher",
+    "name": "Smasher",
+    "category": "Kitchen",
+    "displayPrice": "170",
+    "price": 170,
+    "description": "Smasher"
+  },
+  {
+    "id": "wisk",
+    "name": "Wisk",
+    "category": "Kitchen",
+    "displayPrice": "170–230",
+    "price": 170,
+    "description": "Price range KSh 170–230"
+  },
+  {
+    "id": "grater",
+    "name": "Grater",
+    "category": "Kitchen",
+    "displayPrice": "50–150",
+    "price": 50,
+    "description": "Price range KSh 50–150"
+  },
+  {
+    "id": "sieve",
+    "name": "Sieve",
+    "category": "Kitchen",
+    "displayPrice": "20–30",
+    "price": 20,
+    "description": "Price range KSh 20–30"
+  },
+  {
+    "id": "rolling-pin",
+    "name": "Rolling Pin",
+    "category": "Kitchen",
+    "displayPrice": "70–100",
+    "price": 70,
+    "description": "Price range KSh 70–100"
+  },
+  {
+    "id": "mwiko",
+    "name": "Mwiko",
+    "category": "Kitchen",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Mwiko"
+  },
+  {
+    "id": "wooden-serving-spoon",
+    "name": "Woden Serving Spoon",
+    "category": "Kitchen",
+    "displayPrice": "70",
+    "price": 70,
+    "description": "Woden serving spoon"
+  },
+  {
+    "id": "chopping-board-bamboo",
+    "name": "Chopping Board — Bamboo",
+    "category": "Kitchen",
+    "displayPrice": "370",
+    "price": 370,
+    "description": "Bamboo chopping board"
+  },
+  {
+    "id": "chopping-board-plastic",
+    "name": "Chopping Board — Plastic",
+    "category": "Kitchen",
+    "displayPrice": "250–300",
+    "price": 250,
+    "description": "Price range KSh 250–300"
+  },
+  {
+    "id": "pan-silver",
+    "name": "Pan — Silver",
+    "category": "Kitchen",
+    "displayPrice": "350",
+    "price": 350,
+    "description": "Silver pan"
+  },
+  {
+    "id": "pan-nonstick",
+    "name": "Pan — Non Stick",
+    "category": "Kitchen",
+    "displayPrice": "800–950",
+    "price": 800,
+    "description": "Price range KSh 800–950"
+  },
+  {
+    "id": "pan-chapo",
+    "name": "Pan — Ya Chapo",
+    "category": "Kitchen",
+    "displayPrice": "650",
+    "price": 650,
+    "description": "Ya chapo pan"
+  },
+  {
+    "id": "storage-3",
+    "name": "Storage Containers — Set of 3",
+    "category": "Storage",
+    "displayPrice": "700",
+    "price": 700,
+    "description": "Set of 3"
+  },
+  {
+    "id": "home-fresh-2",
+    "name": "Home Fresh 2",
+    "category": "Storage",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Home fresh 2"
+  },
+  {
+    "id": "home-fresh-3",
+    "name": "Home Fresh 3",
+    "category": "Storage",
+    "displayPrice": "80",
+    "price": 80,
+    "description": "Home fresh 3"
+  },
+  {
+    "id": "salt-shakers",
+    "name": "Salt Shakers",
+    "category": "Storage",
+    "displayPrice": "40",
+    "price": 40,
+    "description": "Salt shakers"
+  },
+  {
+    "id": "jolly-5",
+    "name": "Jolly Containers — Set of 5",
+    "category": "Storage",
+    "displayPrice": "400",
+    "price": 400,
+    "description": "Set of 5"
+  },
+  {
+    "id": "food-dish",
+    "name": "Food Dish",
+    "category": "Storage",
+    "displayPrice": "80–120",
+    "price": 80,
+    "description": "Price range KSh 80–120"
+  },
+  {
+    "id": "curtains",
+    "name": "Curtains",
+    "category": "Home",
+    "displayPrice": "250–500",
+    "price": 250,
+    "description": "Price range KSh 250–500"
+  },
+  {
+    "id": "face-towels",
+    "name": "Face Towels",
+    "category": "Home",
+    "displayPrice": "50–200",
+    "price": 50,
+    "description": "Price range KSh 50–200"
+  },
+  {
+    "id": "kitchen-towel",
+    "name": "Kitchen Towel",
+    "category": "Home",
+    "displayPrice": "30–100",
+    "price": 30,
+    "description": "Price range KSh 30–100"
+  },
+  {
+    "id": "bath-towels",
+    "name": "Bath Towels",
+    "category": "Home",
+    "displayPrice": "500–750",
+    "price": 500,
+    "description": "Price range KSh 500–750"
+  },
+  {
+    "id": "bonnets",
+    "name": "Bonnets",
+    "category": "Home",
+    "displayPrice": "100–150",
+    "price": 100,
+    "description": "Price range KSh 100–150"
+  },
+  {
+    "id": "bath-sponge",
+    "name": "Bath Sponge",
+    "category": "Home",
+    "displayPrice": "50–150",
+    "price": 50,
+    "description": "Price range KSh 50–150"
+  },
+  {
+    "id": "hand-brush",
+    "name": "Hand Brush",
+    "category": "Cleaning",
+    "displayPrice": "50–100",
+    "price": 50,
+    "description": "Price range KSh 50–100"
+  },
+  {
+    "id": "fluffy-mat",
+    "name": "Fluufy Mat",
+    "category": "Home",
+    "displayPrice": "1900",
+    "price": 1900,
+    "description": "Fluufy mat"
+  },
+  {
+    "id": "door-mats",
+    "name": "Door Mats",
+    "category": "Home",
+    "displayPrice": "300–400",
+    "price": 300,
+    "description": "Price range KSh 300–400"
+  },
+  {
+    "id": "pillow",
+    "name": "Pillow Seven Sunday",
+    "category": "Home",
+    "displayPrice": "350",
+    "price": 350,
+    "description": "Pillow seven sunday"
+  },
+  {
+    "id": "dish-rack-metallic",
+    "name": "Dish Rack — Metallic",
+    "category": "Storage",
+    "displayPrice": "1300–2600",
+    "price": 1300,
+    "description": "Price range KSh 1300–2600"
+  },
+  {
+    "id": "kenstar-rack",
+    "name": "Kenstar Rack",
+    "category": "Storage",
+    "displayPrice": "700–850",
+    "price": 700,
+    "description": "Price range KSh 700–850"
+  },
+  {
+    "id": "kenpolly-rack",
+    "name": "Kenpolly Rack",
+    "category": "Storage",
+    "displayPrice": "450–600",
+    "price": 450,
+    "description": "Price range KSh 450–600"
+  },
+  {
+    "id": "water-buckets",
+    "name": "Water Buckets",
+    "category": "Cleaning",
+    "displayPrice": "150–300",
+    "price": 150,
+    "description": "Price range KSh 150–300"
+  },
+  {
+    "id": "clear-buckets",
+    "name": "Clear Buckets",
+    "category": "Cleaning",
+    "displayPrice": "90–170",
+    "price": 90,
+    "description": "Price range KSh 90–170"
+  },
+  {
+    "id": "laundry-bin",
+    "name": "Laundry Bin",
+    "category": "Cleaning",
+    "displayPrice": "350–800",
+    "price": 350,
+    "description": "Price range KSh 350–800"
+  },
+  {
+    "id": "dust-bin",
+    "name": "Dust Bin",
+    "category": "Cleaning",
+    "displayPrice": "100–180",
+    "price": 100,
+    "description": "Price range KSh 100–180"
+  },
+  {
+    "id": "dust-pan",
+    "name": "Dust Pan",
+    "category": "Cleaning",
+    "displayPrice": "50",
+    "price": 50,
+    "description": "Dust pan"
+  },
+  {
+    "id": "brooms",
+    "name": "Brooms",
+    "category": "Cleaning",
+    "displayPrice": "40–350",
+    "price": 40,
+    "description": "Price range KSh 40–350"
+  },
+  {
+    "id": "soap-dish",
+    "name": "Soap Dish",
+    "category": "Cleaning",
+    "displayPrice": "40–130",
+    "price": 40,
+    "description": "Price range KSh 40–130"
+  },
+  {
+    "id": "toothbrush-holder",
+    "name": "Toothbrush Holders",
+    "category": "Cleaning",
+    "displayPrice": "50–100",
+    "price": 50,
+    "description": "Price range KSh 50–100"
+  },
+  {
+    "id": "peg-dish",
+    "name": "Peg Dish",
+    "category": "Cleaning",
+    "displayPrice": "50–100",
+    "price": 50,
+    "description": "Price range KSh 50–100"
+  },
+  {
+    "id": "pegs",
+    "name": "Pegs",
+    "category": "Cleaning",
+    "displayPrice": "20–250",
+    "price": 20,
+    "description": "Price depends on quantity: KSh 20–250"
+  },
+  {
+    "id": "wardrobe",
+    "name": "Wardrobe",
+    "category": "Storage",
+    "displayPrice": "2400–5000",
+    "price": 2400,
+    "description": "Price range KSh 2400–5000"
+  },
+  {
+    "id": "basins",
+    "name": "Basins",
+    "category": "Cleaning",
+    "displayPrice": "80–280",
+    "price": 80,
+    "description": "Price range KSh 80–280"
+  },
+  {
+    "id": "egg-tray",
+    "name": "Egg Tray",
+    "category": "Storage",
+    "displayPrice": "100",
+    "price": 100,
+    "description": "Egg tray"
+  },
+  {
+    "id": "mopper",
+    "name": "Mopper Bucket and Mopper",
+    "category": "Cleaning",
+    "displayPrice": "600–700",
+    "price": 600,
+    "description": "Price range KSh 600–700"
+  },
+  {
+    "id": "mortar-pestle",
+    "name": "Mortar and Pestle",
+    "category": "Kitchen",
+    "displayPrice": "170–200",
+    "price": 170,
+    "description": "Price range KSh 170–200"
+  },
+  {
+    "id": "umbrella",
+    "name": "Umbrella",
+    "category": "Home",
+    "displayPrice": "250–550",
+    "price": 250,
+    "description": "Price range KSh 250–550"
+  },
+  {
+    "id": "stanlley-cups",
+    "name": "Stanlley Cups",
+    "category": "Tableware",
+    "displayPrice": "1000–1300",
+    "price": 1000,
+    "description": "Price range KSh 1000–1300"
+  },
+  {
+    "id": "oil-jar",
+    "name": "Oil Jar",
+    "category": "Storage",
+    "displayPrice": "550",
+    "price": 550,
+    "description": "Oil jar"
+  }
+];
+
+let cart=JSON.parse(localStorage.getItem('chukaCart')||'[]');
+let activeCat='All', query='';
+const money=n=>'KSh '+Number(n).toLocaleString('en-KE');
+const $=id=>document.getElementById(id);
+
+function render(){
+ const list=PRODUCTS.filter(p=>(activeCat==='All'||p.category===activeCat)&&p.name.toLowerCase().includes(query.toLowerCase()));
+ $('resultCount').textContent=list.length+' products';
+ $('products').innerHTML=list.map(p=>`<article class="card"><div class="pic">🏠</div><div class="cardBody"><div class="muted">${p.category}</div><h3>${p.name}</h3><div class="price">${p.displayPrice.startsWith('KSh')?p.displayPrice:p.displayPrice.includes('each')?p.displayPrice:money(p.price)}</div><div class="muted">${p.description}</div><button class="add" onclick="add('${p.id}')">Add to cart</button></div></article>`).join('');
+ updateCart();
+}
+function add(id){let x=cart.find(i=>i.id===id);if(x)x.qty++;else cart.push({id,qty:1});save();openCart()}
+function save(){localStorage.setItem('chukaCart',JSON.stringify(cart));updateCart()}
+function updateCart(){
+ $('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0);
+ $('cartItems').innerHTML=cart.length?cart.map(i=>{let p=PRODUCTS.find(x=>x.id===i.id);return `<div class="cartItem"><div><b>${p.name}</b><div>${money(p.price)} × ${i.qty}</div></div><div class="qty"><button onclick="change('${p.id}',-1)">−</button><button onclick="change('${p.id}',1)">+</button></div></div>`}).join(''):'<p class="muted">Your cart is empty.</p>';
+ $('cartTotal').textContent=money(cart.reduce((s,i)=>s+(PRODUCTS.find(p=>p.id===i.id).price*i.qty),0));
+}
+function change(id,d){let x=cart.find(i=>i.id===id);x.qty+=d;if(x.qty<=0)cart=cart.filter(i=>i.id!==id);save()}
+function openCart(){$('drawer').classList.add('open');$('overlay').classList.add('open')}
+function closeCart(){$('drawer').classList.remove('open');$('overlay').classList.remove('open')}
+$('cartBtn').onclick=openCart;$('closeCart').onclick=closeCart;$('overlay').onclick=closeCart;
+$('search').oninput=e=>{query=e.target.value;render()};
+document.querySelectorAll('.cat').forEach(b=>b.onclick=()=>{document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');activeCat=b.dataset.cat;render()});
+$('checkoutBtn').onclick=()=>{if(!cart.length)return alert('Add a product to your cart first.');closeCart();$('checkout').classList.add('show')};
+$('closeCheckout').onclick=()=>$('checkout').classList.remove('show');
+$('orderForm').onsubmit=e=>{
+ e.preventDefault();
+ const name=$('customerName').value.trim(),phone=$('phone').value.trim(),loc=$('location').value.trim();
+ if(!/^07\d{8}$|^\+2547\d{8}$/.test(phone)) return alert('Please enter a valid Kenyan mobile number.');
+ const total=cart.reduce((s,i)=>s+(PRODUCTS.find(p=>p.id===i.id).price*i.qty),0);
+ const order={id:'CHK-'+Date.now().toString().slice(-7),name,phone,loc,notes:$('notes').value,total,items:cart,date:new Date().toISOString(),payment:'M-Pesa — Till 3212044',status:'Awaiting payment confirmation'};
+ localStorage.setItem('lastChukaOrder',JSON.stringify(order));
+ cart=[];save();$('orderForm').classList.add('hidden');$('confirmation').classList.remove('hidden');$('confirmation').innerHTML=`<h3>Order received</h3><p>Order <b>${order.id}</b> has been created for ${name}.</p><p>Total: <b>${money(total)}</b></p><p>Payment: <b>M-Pesa Till 3212044</b></p><p class="muted">Your order is marked as awaiting payment confirmation. Automatic M-Pesa verification will be connected in the production backend.</p>`;
+};
+$('year').textContent=new Date().getFullYear();render();
+</script>
+</body>
+</html>
